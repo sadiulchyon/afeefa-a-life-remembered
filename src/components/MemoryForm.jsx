@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase';
-import { X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { X, Image as ImageIcon, Loader2, Info } from 'lucide-react';
 
 export default function MemoryForm({ onMemoryAdded }) {
   const [author, setAuthor] = useState('');
@@ -109,54 +109,58 @@ export default function MemoryForm({ onMemoryAdded }) {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label" htmlFor="author">Your Name (or a nickname)</label>
-          <input
-            id="author"
-            type="text"
-            className="form-input"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="e.g., A close friend, or your real name"
-            disabled={isSubmitting}
-          />
+          <label className="form-label" htmlFor="author">Your Name</label>
+          <div style={{ position: 'relative' }}>
+            <input
+              id="author"
+              type="text"
+              className="form-input"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              disabled={isSubmitting}
+            />
+            {!author && (
+              <div style={{ position: 'absolute', top: '50%', left: '0.95rem', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'rgba(255, 255, 255, 0.25)', fontSize: '0.92rem', fontWeight: 300 }}>
+                ...or a nickname like <span style={{ fontStyle: 'italic' }}>a close friend</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="form-group">
           <label className="form-label" htmlFor="content">Your Memory</label>
-          <div style={{ position: 'relative' }}>
-            <textarea
-              id="content"
-              className="form-textarea"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Share a story, a thought, or just something you'll miss..."
+          <textarea
+            id="content"
+            className="form-textarea"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="A few ideas:&#10;• Your first meeting, or what you liked most about her&#10;• A funny story or memory&#10;• How she inspired you to be a better person&#10;• Stories of her kindness and righteousness&#10;• A dish she cooked that you loved&#10;• How loving she was to her kids&#10;• How she mentored or guided you&#10;• Anything you learned from her&#10;• Or simply a quiet thought or prayer..."
+            disabled={isSubmitting}
+            style={{ marginBottom: '0.5rem' }}
+          />
+          
+          <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '0.25rem' }}>
+            <button 
+              type="button" 
+              onClick={() => fileInputRef.current?.click()}
               disabled={isSubmitting}
-              style={{ marginBottom: '0.5rem', paddingBottom: '3rem' }}
+              style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0' }}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
+              title="Add Photos"
+            >
+              <ImageIcon size={20} />
+              <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Add Photos</span>
+            </button>
+            <input
+              type="file"
+              multiple
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              accept="image/*"
+              disabled={isSubmitting}
             />
-            
-            <div style={{ position: 'absolute', bottom: '1.25rem', left: '1rem', display: 'flex', alignItems: 'center' }}>
-              <button 
-                type="button" 
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isSubmitting}
-                style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
-                onMouseOut={(e) => e.currentTarget.style.color = 'var(--color-text-muted)'}
-                title="Add Photos"
-              >
-                <ImageIcon size={22} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Add Photos</span>
-              </button>
-              <input
-                type="file"
-                multiple
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                accept="image/*"
-                disabled={isSubmitting}
-              />
-            </div>
           </div>
 
           {files.length > 0 && (

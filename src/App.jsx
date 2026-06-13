@@ -13,12 +13,13 @@ function App() {
     <div className="container">
       <header className="header">
         <h1>In Loving Memory of Afeefa</h1>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 300, color: 'var(--color-accent)', marginTop: '0.25rem', marginBottom: '1.5rem', letterSpacing: '0.05em', lineHeight: '1.5' }}>
+          যে গেছে ছায়াপ্রাণ বনবীথিতলে <br />
+          যে গেছে অশ্রুময় বন-অন্তরালে
+        </h2>
         <div className="header-divider" />
         <p className="header-subtitle">
-          For Ayaan and Alaa — so you may always know what an amazing person your mother was.
-        </p>
-        <p className="header-subtitle" style={{ marginTop: '0.5rem', fontSize: '0.88rem' }}>
-          Please share a thought or a story.
+          For Ayaan and Alaa — so you may always know what a brilliant, kind, and beautiful soul your mother was.
         </p>
       </header>
 
@@ -30,9 +31,6 @@ function App() {
       {/* ── Two-column feed ── */}
       <MemoryFeed refreshTrigger={refreshTrigger} />
 
-      <footer style={{ textAlign: 'center', marginTop: '3rem', paddingBottom: '2rem', color: 'var(--color-text-muted)', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
-        <p>Created with love by those who knew her best.</p>
-      </footer>
     </div>
   );
 }
